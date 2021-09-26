@@ -5,7 +5,7 @@ function useEditor() {
     const [state, setState] = React.useState(() => EditorState.createEmpty());
 
     const toggleBlockType = React.useCallback(blockType => {
-        setState((currentState) => RichUtils.toggleBlockType(currentState, blockType));
+        RichUtils.toggleBlockType(state, blockType);
     }, []);
 
     const currentBlockType = React.useMemo(() => {
@@ -16,13 +16,13 @@ function useEditor() {
     }, [state]);
 
     const toggleInlineStyle = React.useCallback((inlineStyle) => {
-        setState((currentState) => RichUtils.toggleInlineStyle(currentState, inlineStyle));
+        RichUtils.toggleInlineStyle(state, inlineStyle);
     }, []);
 
     const hasInlineStyle = React.useCallback((inlineStyle) => {
         const currentStyle = state.getCurrentInlineStyle();
         return currentStyle.has(inlineStyle);
-    });
+    },[]);
 
     return React.useMemo(() => ({
         state,
@@ -31,7 +31,12 @@ function useEditor() {
         currentBlockType,
         toggleInlineStyle,
         hasInlineStyle,
-    }), [state]);
+    }), [state, 
+        setState, 
+        toggleInlineStyle, 
+        currentBlockType, 
+        toggleInlineStyle, 
+        hasInlineStyle]);
 };
 
 export default useEditor;
