@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './ToolPanel.css';
-import useEditor from '../textEditor/useEditor';
+import { useEditorApi } from '../textEditor/context';
 import cn from 'classnames';
 import ToolPanelButton from './ToolPanelButton';
 
@@ -15,14 +15,15 @@ const BLOCK_TYPES = [
     {label: 'UL', style: 'unordered-list-item'},
     {label: 'OL', style: 'ordered-list-item'},
     {label: 'cite', style: 'cite'},
+    {label: 'unstyled', style: 'unstyled'},
   ];
 
   const INLINE_STYLES = [
     {label: 'Bold', style: 'BOLD'},
     {label: 'Italic', style: 'ITALIC'},
     {label: 'Underline', style: 'UNDERLINE'},
-    {label: 'Monospace', style: 'CODE'},
-    {label: 'Acent', style: 'ACCENT'},
+    {label: 'Code', style: 'CODE'},
+    {label: 'Accent', style: 'ACCENT'},
   ];
 
 function ToolPanel({ className }) {
@@ -31,30 +32,34 @@ function ToolPanel({ className }) {
         currentBlockType,
         toggleInlineStyle,
         hasInlineStyle, 
-    } = useEditor();
-    console.log(currentBlockType)
+    } = useEditorApi();
+
     return (
-        <div className={cn('tool-panel', className)}>
-            {BLOCK_TYPES.map(({ label, style}) => (
-                <ToolPanelButton 
-                    key={style}
-                    style={style}
-                    onToggle={toggleBlockType}
-                    isActive={style === currentBlockType}
-                >
-                    {label}
-                </ToolPanelButton>
-            ) )}
-            {INLINE_STYLES.map(({ label, style }) => (
-                <ToolPanelButton
-                    key={style}
-                    style={style}
-                    onToggle={toggleInlineStyle}
-                    isActive={hasInlineStyle(style)}
-                >
-                    {label}
-                </ToolPanelButton>
-            ))}
+        <div className={cn('toolPanel', className)}>
+            <div className='toolPanel__row'>
+                {BLOCK_TYPES.map(({ label, style}) => (
+                    <ToolPanelButton 
+                        key={style}
+                        style={style}
+                        onToggle={toggleBlockType}
+                        isActive={style === currentBlockType}
+                    >
+                        {label}
+                    </ToolPanelButton>
+                ) )}
+            </div>
+            <div className='toolPanel__row'>
+                {INLINE_STYLES.map(({ label, style }) => (
+                    <ToolPanelButton
+                        key={style}
+                        style={style}
+                        onToggle={toggleInlineStyle}
+                        isActive={hasInlineStyle(style)}
+                    >
+                        {label}
+                    </ToolPanelButton>
+                ))}
+            </div>
         </div>
     );
 };

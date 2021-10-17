@@ -1,0 +1,9 @@
+.toolPanel {
+  font-family: 'Helvetica', sans-serif;
+  font-size: 14px;
+  margin-bottom: 5px;
+  user-select: none;
+}
+.toolPanel__row {
+  padding: 5px 5px 6px 5px;
+}

@@ -1,0 +1,9 @@
+.textEditor {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  padding: 12px;
+  margin-top: 16px;
+}

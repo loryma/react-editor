@@ -1,5 +1,6 @@
 import * as React from 'react';
 import cn from 'classnames';
+import './ToolPanelButton.css';
 
 function ToolPanelButton({ style, isActive, onToggle, children }) {
     const onMouseDown = (e) => {
