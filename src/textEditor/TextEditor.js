@@ -6,7 +6,7 @@ import cn from 'classnames';
 import './TextEditor.css';
 
 function TextEditor({ className }) {
-    const { state, onChange, handleKeyCommand } = useEditorApi();
+    const { state, onChange, handleKeyCommand, handlerKeyBinding } = useEditorApi();
 
     return (
         <div className={cn('textEditor', className)}>
@@ -17,6 +17,7 @@ function TextEditor({ className }) {
                 handleKeyCommand={handleKeyCommand}
                 blockRenderMap={BLOCK_RENDER_MAP}
                 customStyleMap={CUSTOM_STYLE_MAP}    
+                keyBindingFn={handlerKeyBinding}
            />
         </div>
     );

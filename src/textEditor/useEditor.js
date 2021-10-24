@@ -1,4 +1,4 @@
-import { EditorState, RichUtils, CompositeDecorator } from 'draft-js';
+import { EditorState, RichUtils, CompositeDecorator, KeyBindingUtil, getDefaultKeyBinding } from 'draft-js';
 import * as React from 'react';
 import LinkDecorator from './Link';
 
@@ -28,6 +28,10 @@ function useEditor() {
     },[state]); 
 
     const handleKeyCommand = React.useCallback((command, editorState) => {
+        if (command === 'ACCENT') {
+            toggleInlineStyle('ACCENT');
+            return 'handled';
+        }
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
             setState(newState);
@@ -35,6 +39,13 @@ function useEditor() {
         }
 
         return 'not-handled';
+    }, []);
+
+    const handlerKeyBinding = React.useCallback((e) => {
+        if (e.keyCode === 81 && KeyBindingUtil.hasCommandModifier(e)) {
+            return 'ACCENT';
+        }
+        return getDefaultKeyBinding(e);
     }, []);
 
     const addEntity = React.useCallback((entityType, data, mutability) => {
@@ -72,6 +83,7 @@ function useEditor() {
         handleKeyCommand,
         addLink,
         setEntityData,
+        handlerKeyBinding,
     }), [state, 
         setState, 
         toggleInlineStyle, 
@@ -81,6 +93,7 @@ function useEditor() {
         handleKeyCommand,
         addLink,
         setEntityData,
+        handlerKeyBinding,
     ]);
 };
 
