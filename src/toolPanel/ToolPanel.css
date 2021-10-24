@@ -4,6 +4,15 @@
   margin-bottom: 5px;
   user-select: none;
 }
+
+
+.toolPanel--bottom {
+  margin-top: 16px;
+}
 .toolPanel__row {
-  padding: 5px 5px 6px 5px;
+  padding: 8px 5px 8px 5px;
+}
+
+.toolPanel__action-button {
+  margin-right: 8px;
 }
