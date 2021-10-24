@@ -1,8 +1,11 @@
-import { EditorState, RichUtils } from 'draft-js';
+import { EditorState, RichUtils, CompositeDecorator } from 'draft-js';
 import * as React from 'react';
+import LinkDecorator from './Link';
+
+const decorator = new CompositeDecorator([LinkDecorator]);
 
 function useEditor() { 
-    const [state, setState] = React.useState(() => EditorState.createEmpty());
+    const [state, setState] = React.useState(() => EditorState.createEmpty(decorator));
 
     const toggleBlockType = React.useCallback(blockType => {
         setState(state => RichUtils.toggleBlockType(state, blockType));
@@ -34,6 +37,31 @@ function useEditor() {
         return 'not-handled';
     }, []);
 
+    const addEntity = React.useCallback((entityType, data, mutability) => {
+        setState((currentState) => {
+            const contentState = currentState.getCurrentContent();
+            const contentStateWithEntity = contentState.createEntity(entityType, mutability, data);
+            const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+            const newState = EditorState.set(currentState,  {currentContent: contentStateWithEntity});
+            return RichUtils.toggleLink(newState, newState.getSelection(), entityKey)
+        })
+    }, []);
+
+    const addLink = React.useCallback((url) => {
+        addEntity('link', { url }, 'MUTABLE');
+    }, [addEntity]);
+
+    const setEntityData = React.useCallback((entityKey, data) => {
+        setState((currentState) => {
+            const content = currentState.getCurrentContent();
+            const contentStateUpdated = content.mergeEntityData(
+                entityKey,
+                data,
+            );
+            return EditorState.push(currentState, contentStateUpdated, 'apply-entity')
+        })
+    }, [])
+
     return React.useMemo(() => ({
         state,
         onChange: setState,
@@ -42,6 +70,8 @@ function useEditor() {
         toggleInlineStyle,
         hasInlineStyle,
         handleKeyCommand,
+        addLink,
+        setEntityData,
     }), [state, 
         setState, 
         toggleInlineStyle, 
@@ -49,6 +79,8 @@ function useEditor() {
         toggleInlineStyle, 
         hasInlineStyle,
         handleKeyCommand,
+        addLink,
+        setEntityData,
     ]);
 };
 

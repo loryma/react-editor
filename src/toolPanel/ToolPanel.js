@@ -32,7 +32,15 @@ function ToolPanel({ className }) {
         currentBlockType,
         toggleInlineStyle,
         hasInlineStyle, 
+        addLink,
     } = useEditorApi();
+
+    const handlerAddLink = () => {
+        const url = prompt('URL:');
+        if (url) {
+            addLink(url);
+        }
+    }
 
     return (
         <div className={cn('toolPanel', className)}>
@@ -59,6 +67,11 @@ function ToolPanel({ className }) {
                         {label}
                     </ToolPanelButton>
                 ))}
+            </div>
+            <div className='toolPanel__row'>
+                <button onClick={handlerAddLink}>
+                    🔗 Add link
+                </button>
             </div>
         </div>
     );
