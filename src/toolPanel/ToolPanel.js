@@ -3,28 +3,7 @@ import './ToolPanel.css';
 import { useEditorApi } from '../textEditor/context';
 import cn from 'classnames';
 import ToolPanelButton from './ToolPanelButton';
-
-const BLOCK_TYPES = [
-    {label: 'H1', style: 'header-one'},
-    {label: 'H2', style: 'header-two'},
-    {label: 'H3', style: 'header-three'},
-    {label: 'H4', style: 'header-four'},
-    {label: 'H5', style: 'header-five'},
-    {label: 'H6', style: 'header-six'},
-    {label: 'Blockquote', style: 'blockquote'},
-    {label: 'UL', style: 'unordered-list-item'},
-    {label: 'OL', style: 'ordered-list-item'},
-    {label: 'cite', style: 'cite'},
-    {label: 'unstyled', style: 'unstyled'},
-  ];
-
-  const INLINE_STYLES = [
-    {label: 'Bold', style: 'BOLD'},
-    {label: 'Italic', style: 'ITALIC'},
-    {label: 'Underline', style: 'UNDERLINE'},
-    {label: 'Code', style: 'CODE'},
-    {label: 'Accent', style: 'ACCENT'},
-  ];
+import { BLOCK_TYPES, INLINE_STYLES } from '../textEditor/config';
 
 function ToolPanel({ className }) {
     const { 
@@ -33,6 +12,7 @@ function ToolPanel({ className }) {
         toggleInlineStyle,
         hasInlineStyle, 
         addLink,
+        toHTML,
     } = useEditorApi();
 
     const handlerAddLink = () => {
@@ -40,6 +20,11 @@ function ToolPanel({ className }) {
         if (url) {
             addLink(url);
         }
+    }
+
+    const handleToHTML = () => {
+        const html = toHTML();
+        console.log(html);
     }
 
     return (
@@ -72,6 +57,7 @@ function ToolPanel({ className }) {
                 <button onClick={handlerAddLink}>
                     🔗 Add link
                 </button>
+                <button onClick={handleToHTML}>Print</button>
             </div>
         </div>
     );

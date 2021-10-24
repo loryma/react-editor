@@ -1,11 +1,12 @@
 import { EditorState, RichUtils, CompositeDecorator, KeyBindingUtil, getDefaultKeyBinding } from 'draft-js';
 import * as React from 'react';
+import { stateToHTML, HTMLtoState } from './convert';
 import LinkDecorator from './Link';
 
 const decorator = new CompositeDecorator([LinkDecorator]);
 
-function useEditor() { 
-    const [state, setState] = React.useState(() => EditorState.createEmpty(decorator));
+function useEditor(html) { 
+    const [state, setState] = React.useState(() => html ? EditorState.createWithContent(HTMLtoState(html)) : EditorState.createEmpty(decorator));
 
     const toggleBlockType = React.useCallback(blockType => {
         setState(state => RichUtils.toggleBlockType(state, blockType));
@@ -73,6 +74,10 @@ function useEditor() {
         })
     }, [])
 
+    const toHTML = React.useCallback(() => {
+        return stateToHTML(state.getCurrentContent());
+    }, [state])
+
     return React.useMemo(() => ({
         state,
         onChange: setState,
@@ -84,6 +89,7 @@ function useEditor() {
         addLink,
         setEntityData,
         handlerKeyBinding,
+        toHTML,
     }), [state, 
         setState, 
         toggleInlineStyle, 
@@ -94,6 +100,7 @@ function useEditor() {
         addLink,
         setEntityData,
         handlerKeyBinding,
+        toHTML,
     ]);
 };
 
